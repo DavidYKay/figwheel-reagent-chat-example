@@ -4,18 +4,27 @@
   :license {:name "Eclipse Public License"
             :url "http://www.eclipse.org/legal/epl-v10.html"}
 
-  :dependencies [[org.clojure/clojure "1.7.0"]
-                 [org.clojure/clojurescript "1.7.170"]
+  :dependencies [
+                 ;; Server
+                 [org.clojure/clojure "1.7.0"]
+                 [compojure "1.4.0"]
+
+                 ;; Cross-platform
                  [org.clojure/core.async "0.2.374"]
 
+                 ;; Client
+                 [org.clojure/clojurescript "1.7.170"]
                  [reagent "0.5.1"]
                  [cljs-http "0.1.39"]
                  ]
 
   :plugins [[lein-cljsbuild "1.1.1"]
-            [lein-figwheel "0.5.0-3"]]
+            [lein-figwheel "0.5.0-3"]
+            [lein-ring "0.9.7"]]
 
   :source-paths ["src-clj"]
+
+  :ring {:handler chat.server/app}
 
   :clean-targets ^{:protect false} ["resources/public/js/compiled" "target"]
 
