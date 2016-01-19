@@ -9,7 +9,7 @@
 
 (defonce app-state (r/atom {:chat-input ""
                             :messages []
-                            }))
+                            :username "Anonymous"}))
 
 
 (defn on-js-reload []
@@ -20,6 +20,14 @@
 
 (defn main-ui []
   [:div
+
+   [:div "Username:"]
+   [:input
+     {:placeholder "Neo",
+      :type "text"
+      :value (:username @app-state)
+      :on-change (fn [ev]
+                   (swap! app-state assoc :username (-> ev .-target .-value)))}]
 
    [:div "Chat Messages"]
    [:ul
@@ -37,7 +45,7 @@
     [:button {:class "button"
               :on-click #(do
                            (swap! app-state assoc :messages (conj (:messages @app-state)
-                                                                  {:sender "Me"
+                                                                  {:sender (:username @app-state)
                                                                    :text (:chat-input @app-state)}))
                            (swap! app-state dissoc :chat-input)
                            (.preventDefault %))} "Click Me"]]
