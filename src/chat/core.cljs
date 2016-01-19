@@ -7,8 +7,7 @@
 
 ;; define your app data so that it doesn't get over-written on reload
 
-(defonce app-state (r/atom {:text "Hello world!"
-                            :chat-input ""
+(defonce app-state (r/atom {:chat-input ""
                             :messages []
                             }))
 
