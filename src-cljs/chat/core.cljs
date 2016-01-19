@@ -1,5 +1,6 @@
 (ns chat.core
   (:require [reagent.core :as r]
+            [cljs.reader :refer [read-string]]
             [ajax.core :refer [GET POST]]))
 
 (enable-console-print!)
@@ -60,8 +61,9 @@
 
    [:button {:class "button"
               :on-click #(do
-                           (GET "http://localhost:3000/messages" {:handler handler
-                                          :error-handler error-handler})
+                           (GET "http://localhost:3000/messages" {:handler (fn [response]
+                                                                             (swap! app-state assoc :messages (read-string response) ))
+                                                                  :error-handler error-handler})
                            (.preventDefault %))} "Refresh"]
 
    ])
