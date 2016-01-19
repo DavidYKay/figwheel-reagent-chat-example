@@ -22,26 +22,26 @@
 (defn main-ui []
   [:div
 
-   [:div "App state:"]
-   [:div (:text @app-state)]
-
-   [:div "Chat messages"]
+   [:div "Chat Messages"]
    [:ul
-    (for [message (:messages @app-state)]
-      [:li message])]
+    (for [{:keys [text sender] :as message} (:messages @app-state)]
+      [:li (str sender ": " text)])]
 
-   [:input
-    {:placeholder "My message here...",
-     :type "text"
-     :value (:chat-input @app-state)
-     :on-change (fn [ev]
+   [:form
+    [:input
+     {:placeholder "My message here...",
+      :type "text"
+      :value (:chat-input @app-state)
+      :on-change (fn [ev]
                    (swap! app-state assoc :chat-input (-> ev .-target .-value)))}]
 
-   [:button {:class "button"
-             :on-click #(do
-                          (swap! app-state assoc :messages (conj (:messages @app-state) (:chat-input @app-state)))
-                          (swap! app-state dissoc :chat-input)
-                          (.preventDefault %))} "Click Me"]
+    [:button {:class "button"
+              :on-click #(do
+                           (swap! app-state assoc :messages (conj (:messages @app-state)
+                                                                  {:sender "Me"
+                                                                   :text (:chat-input @app-state)}))
+                           (swap! app-state dissoc :chat-input)
+                           (.preventDefault %))} "Click Me"]]
 
    ])
 
