@@ -24,7 +24,7 @@
 
   :source-paths ["src-clj"]
 
-  :ring {:handler chat.server/app}
+  :ring {:handler chat.server/handler}
 
   :clean-targets ^{:protect false} ["resources/public/js/compiled" "target"]
 

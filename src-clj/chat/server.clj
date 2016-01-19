@@ -4,6 +4,13 @@
 
 (def messages (atom [{:text "Example Message" :sender "David"}]))
 
+(defn wrap-cors-response
+  "Middleware that adds a CORS header to the response"
+  [handler]
+  (fn [request]
+    (let [response (handler request)]
+      (assoc-in response [:headers "Access-Control-Allow-Origin"] "*"))))
+
 (defroutes app
   (GET "/" [] "<h1>Hello Chat World</h1>")
   (GET "/messages" []
@@ -13,3 +20,5 @@
           (swap! messages conj parsed)
           (pr-str @messages)))
   (route/not-found "<h1>Page not found</h1>"))
+
+(def handler (wrap-cors-response app))
