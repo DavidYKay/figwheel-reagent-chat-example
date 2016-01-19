@@ -9,6 +9,7 @@
 
 (defonce app-state (r/atom {:text "Hello world!"
                             :chat-input ""
+                            :messages []
                             }))
 
 
@@ -24,15 +25,23 @@
    [:div "App state:"]
    [:div (:text @app-state)]
 
-   [:div "Chat Input:"]
-   [:div (:chat-input @app-state)]
+   [:div "Chat messages"]
+   [:ul
+    (for [message (:messages @app-state)]
+      [:li message])]
 
    [:input
     {:placeholder "My message here...",
      :type "text"
      :value (:chat-input @app-state)
      :on-change (fn [ev]
-                  (swap! app-state assoc :chat-input (-> ev .-target .-value)))}]
+                   (swap! app-state assoc :chat-input (-> ev .-target .-value)))}]
+
+   [:button {:class "button"
+             :on-click #(do
+                          (swap! app-state assoc :messages (conj (:messages @app-state) (:chat-input @app-state)))
+                          (swap! app-state dissoc :chat-input)
+                          (.preventDefault %))} "Click Me"]
 
    ])
 
