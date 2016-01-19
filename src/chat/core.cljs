@@ -48,7 +48,7 @@
                                                                   {:sender (:username @app-state)
                                                                    :text (:chat-input @app-state)}))
                            (swap! app-state dissoc :chat-input)
-                           (.preventDefault %))} "Click Me"]]
+                           (.preventDefault %))} "Send Message"]]
 
    ])
 
