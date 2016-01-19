@@ -1,5 +1,6 @@
 (ns chat.core
-  (:require [reagent.core :as r]))
+  (:require [reagent.core :as r]
+            [ajax.core :refer [GET POST]]))
 
 (enable-console-print!)
 
@@ -17,6 +18,13 @@
   ;; your application
   ;; (swap! app-state update-in [:__figwheel_counter] inc)
 )
+
+
+(defn handler [response]
+  (.log js/console (str response)))
+
+(defn error-handler [{:keys [status status-text]}]
+  (.log js/console (str "something bad happened: " status " " status-text)))
 
 (defn main-ui []
   [:div
@@ -49,6 +57,12 @@
                                                                    :text (:chat-input @app-state)}))
                            (swap! app-state dissoc :chat-input)
                            (.preventDefault %))} "Send Message"]]
+
+   [:button {:class "button"
+              :on-click #(do
+                           (GET "http://localhost:3000/messages" {:handler handler
+                                          :error-handler error-handler})
+                           (.preventDefault %))} "Refresh"]
 
    ])
 

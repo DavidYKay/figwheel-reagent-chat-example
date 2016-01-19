@@ -15,7 +15,7 @@
                  ;; Client
                  [org.clojure/clojurescript "1.7.170"]
                  [reagent "0.5.1"]
-                 [cljs-http "0.1.39"]
+                 [cljs-ajax "0.5.3"]
                  ]
 
   :plugins [[lein-cljsbuild "1.1.1"]
