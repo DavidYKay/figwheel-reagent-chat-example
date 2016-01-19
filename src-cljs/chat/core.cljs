@@ -31,12 +31,11 @@
   [:div
 
    [:div "Username:"]
-   [:input
-     {:placeholder "Neo",
-      :type "text"
-      :value (:username @app-state)
-      :on-change (fn [ev]
-                   (swap! app-state assoc :username (-> ev .-target .-value)))}]
+   [:input {:placeholder "Neo",
+            :type "text"
+            :value (:username @app-state)
+            :on-change (fn [ev]
+                         (swap! app-state assoc :username (-> ev .-target .-value)))}]
 
    [:div "Chat Messages"]
    [:ul
@@ -44,12 +43,11 @@
       [:li (str sender ": " text)])]
 
    [:form
-    [:input
-     {:placeholder "My message here...",
-      :type "text"
-      :value (:chat-input @app-state)
-      :on-change (fn [ev]
-                   (swap! app-state assoc :chat-input (-> ev .-target .-value)))}]
+    [:input {:placeholder "My message here...",
+             :type "text"
+             :value (:chat-input @app-state)
+             :on-change (fn [ev]
+                          (swap! app-state assoc :chat-input (-> ev .-target .-value)))}]
 
     [:button {:class "button"
               :on-click #(do
@@ -60,11 +58,11 @@
                            (.preventDefault %))} "Send Message"]]
 
    [:button {:class "button"
-              :on-click #(do
-                           (GET "http://localhost:3000/messages" {:handler (fn [response]
-                                                                             (swap! app-state assoc :messages (read-string response) ))
-                                                                  :error-handler error-handler})
-                           (.preventDefault %))} "Refresh"]
+             :on-click #(do
+                          (GET "http://localhost:3000/messages" {:handler (fn [response]
+                                                                            (swap! app-state assoc :messages (read-string response) ))
+                                                                 :error-handler error-handler})
+                          (.preventDefault %))} "Refresh"]
 
    ])
 
