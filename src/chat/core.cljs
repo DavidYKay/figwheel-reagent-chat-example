@@ -1,5 +1,5 @@
 (ns chat.core
-  (:require ))
+  (:require [reagent.core :as r]))
 
 (enable-console-print!)
 
@@ -7,7 +7,7 @@
 
 ;; define your app data so that it doesn't get over-written on reload
 
-(defonce app-state (atom {:text "Hello world!"}))
+(defonce app-state (r/atom {:text "Hello world!"}))
 
 
 (defn on-js-reload []
@@ -15,3 +15,11 @@
   ;; your application
   ;; (swap! app-state update-in [:__figwheel_counter] inc)
 )
+
+(defn main-ui []
+  [:div
+    [:div "App state:"]
+    [:div (:text @app-state)]])
+
+(r/render-component [main-ui]
+                    (js/document.getElementById "app"))
