@@ -15,13 +15,13 @@
   :plugins [[lein-cljsbuild "1.1.1"]
             [lein-figwheel "0.5.0-3"]]
 
-  :source-paths ["src"]
+  :source-paths ["src-clj"]
 
   :clean-targets ^{:protect false} ["resources/public/js/compiled" "target"]
 
   :cljsbuild {:builds
               [{:id "dev"
-                :source-paths ["src"]
+                :source-paths ["src-cljs"]
 
                 :figwheel {:on-jsload "chat.core/on-js-reload"}
 
@@ -34,7 +34,7 @@
                ;; production. You can build this with:
                ;; lein cljsbuild once min
                {:id "min"
-                :source-paths ["src"]
+                :source-paths ["src-cljs"]
                 :compiler {:output-to "resources/public/js/compiled/chat.js"
                            :main chat.core
                            :optimizations :advanced
