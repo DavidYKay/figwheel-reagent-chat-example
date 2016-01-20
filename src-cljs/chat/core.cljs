@@ -53,9 +53,13 @@
               :on-click #(do
                            (POST "http://localhost:3000/messages" {:body (pr-str {:sender (:username @app-state)
                                                                                   :text (:chat-input @app-state)})
-                                              :handler (fn [response]
-                                                         (swap! app-state dissoc :chat-input))
-                                              :error-handler error-handler})
+                                                                   :handler (fn [response]
+                                                                              (let [messages (read-string response)]
+                                                                                (swap! app-state (fn [old]
+                                                                                                   (-> old
+                                                                                                     (dissoc :chat-input)
+                                                                                                     (assoc :messages messages))))))
+                                                                   :error-handler error-handler})
                            (.preventDefault %))} "Send Message"]]
 
    [:button {:class "button"
