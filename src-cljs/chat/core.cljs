@@ -32,7 +32,7 @@
                                                     (swap! app-state assoc :messages (read-string response)))
                                          :error-handler error-handler}))
 
-(defn main-ui []
+(defn component-render []
   [:div
 
    [:div "Username:"]
@@ -71,6 +71,13 @@
              :on-click #(do
                           (refresh-messages)
                           (.preventDefault %))} "Refresh"]])
+
+(defn component-did-mount [x]
+  (refresh-messages))
+
+(defn main-ui []
+  (r/create-class {:reagent-render component-render
+                   :component-did-mount component-did-mount}))
 
 (r/render-component [main-ui]
                     (js/document.getElementById "app"))
