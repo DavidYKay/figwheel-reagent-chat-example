@@ -29,6 +29,13 @@
                                                     (swap! app-state assoc :messages (read-string response)))
                                          :error-handler error-handler}))
 
+(defn refresh-button []
+   [:button {:class "button"
+             :on-click #(do
+                          (refresh-messages)
+                          (.preventDefault %))} "Refresh"])
+
+
 (defn component-render []
   [:div
 
@@ -64,10 +71,8 @@
                                                                    :error-handler error-handler})
                            (.preventDefault %))} "Send Message"]]
 
-   [:button {:class "button"
-             :on-click #(do
-                          (refresh-messages)
-                          (.preventDefault %))} "Refresh"]])
+   [refresh-button]
+   ])
 
 (defn component-did-mount [x]
   (refresh-messages))
