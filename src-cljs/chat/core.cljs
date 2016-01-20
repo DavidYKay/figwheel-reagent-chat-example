@@ -3,9 +3,9 @@
             [cljs.reader :refer [read-string]]
             [ajax.core :refer [GET POST]]))
 
-(enable-console-print!)
+;; Setup Code
 
-(println "Edits to this text should show up in your developer console.")
+(enable-console-print!)
 
 ;; define your app data so that it doesn't get over-written on reload
 
@@ -20,6 +20,7 @@
   ;; (swap! app-state update-in [:__figwheel_counter] inc)
 )
 
+;; Network Calls
 
 (defn error-handler [{:keys [status status-text]}]
   (.log js/console (str "something bad happened: " status " " status-text)))
@@ -29,28 +30,25 @@
                                                     (swap! app-state assoc :messages (read-string response)))
                                          :error-handler error-handler}))
 
-(defn refresh-button []
-   [:button {:class "button"
-             :on-click #(do
-                          (refresh-messages)
-                          (.preventDefault %))} "Refresh"])
+;; UI Components
 
-
-(defn component-render []
+(defn username-input []
   [:div
-
    [:div "Username:"]
    [:input {:placeholder "Neo",
             :type "text"
             :value (:username @app-state)
             :on-change (fn [ev]
-                         (swap! app-state assoc :username (-> ev .-target .-value)))}]
+                         (swap! app-state assoc :username (-> ev .-target .-value)))}]])
 
+
+(defn chat-messages []
    [:div "Chat Messages"]
    [:ul
     (for [{:keys [text sender] :as message} (:messages @app-state)]
-      [:li (str sender ": " text)])]
+      [:li (str sender ": " text)])])
 
+(defn chat-input []
    [:form
     [:input {:placeholder "My message here...",
              :type "text"
@@ -69,10 +67,27 @@
                                                                                                      (dissoc :chat-input)
                                                                                                      (assoc :messages messages))))))
                                                                    :error-handler error-handler})
-                           (.preventDefault %))} "Send Message"]]
+                           (.preventDefault %))} "Send Message"]])
 
-   [refresh-button]
-   ])
+(defn refresh-button []
+   [:button {:class "button"
+             :on-click #(do
+                          (refresh-messages)
+                          (.preventDefault %))} "Refresh"])
+
+
+;; Main App UI
+
+(defn component-render []
+  [:div
+
+   [username-input]
+
+   [chat-messages]
+
+   [chat-input]
+
+   [refresh-button]])
 
 (defn component-did-mount [x]
   (refresh-messages))
@@ -80,6 +95,8 @@
 (defn main-ui []
   (r/create-class {:reagent-render component-render
                    :component-did-mount component-did-mount}))
+
+;; Entry point
 
 (r/render-component [main-ui]
                     (js/document.getElementById "app"))
