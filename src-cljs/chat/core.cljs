@@ -27,6 +27,11 @@
 (defn error-handler [{:keys [status status-text]}]
   (.log js/console (str "something bad happened: " status " " status-text)))
 
+(defn refresh-messages []
+  (GET "http://localhost:3000/messages" {:handler (fn [response]
+                                                    (swap! app-state assoc :messages (read-string response)))
+                                         :error-handler error-handler}))
+
 (defn main-ui []
   [:div
 
@@ -64,12 +69,8 @@
 
    [:button {:class "button"
              :on-click #(do
-                          (GET "http://localhost:3000/messages" {:handler (fn [response]
-                                                                            (swap! app-state assoc :messages (read-string response)))
-                                                                 :error-handler error-handler})
-                          (.preventDefault %))} "Refresh"]
-
-   ])
+                          (refresh-messages)
+                          (.preventDefault %))} "Refresh"]])
 
 (r/render-component [main-ui]
                     (js/document.getElementById "app"))
