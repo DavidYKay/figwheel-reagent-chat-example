@@ -51,16 +51,17 @@
 
     [:button {:class "button"
               :on-click #(do
-                           (swap! app-state assoc :messages (conj (:messages @app-state)
-                                                                  {:sender (:username @app-state)
-                                                                   :text (:chat-input @app-state)}))
-                           (swap! app-state dissoc :chat-input)
+                           (POST "http://localhost:3000/messages" {:body (pr-str {:sender (:username @app-state)
+                                                                                  :text (:chat-input @app-state)})
+                                              :handler (fn [response]
+                                                         (swap! app-state dissoc :chat-input))
+                                              :error-handler error-handler})
                            (.preventDefault %))} "Send Message"]]
 
    [:button {:class "button"
              :on-click #(do
                           (GET "http://localhost:3000/messages" {:handler (fn [response]
-                                                                            (swap! app-state assoc :messages (read-string response) ))
+                                                                            (swap! app-state assoc :messages (read-string response)))
                                                                  :error-handler error-handler})
                           (.preventDefault %))} "Refresh"]
 
